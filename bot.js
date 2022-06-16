@@ -3,6 +3,7 @@ const { Client, Intents } = require('discord.js');
 require('dotenv').config();
 const db = require('./models');
 const moment = require('moment');
+const { Sequelize } = require('sequelize');
 
 //Bot Discord
 const client = new Client();
@@ -44,7 +45,7 @@ client.on('message', (message) => {
             date,
           })
           .then(() => {
-            message.reply('Commande ajoutée');
+            message.reply('Event ajoutée');
           })
           .catch((e) => {
             if (e.name === 'SequelizeUniqueConstaintError') {
@@ -54,6 +55,39 @@ client.on('message', (message) => {
           });
         break;
       //On récupère dans un tableau les events en cours et à venir
+      case 'event':
+        const time = new Date();
+        db.event
+          .findAll({
+            attributes: ['id', 'eventname', 'message', 'date'],
+            where: { date: { [Sequelize.Op.gte]: time } },
+          })
+          .then((res) => {
+            const listRes =
+              res
+                .map((event) => `${event.eventname} - ${event.message} - ${event.date}`)
+                .join('\n') || "Pas d'events";
+            message.channel.send(`Liste des évènements en cours et à venir: \n${listRes}`, {
+              split: true,
+            });
+          });
+        break;
+
+      //On récupère tous les events
+      case 'help':
+        db.event
+          .findAll({
+            attributes: ['id', 'eventname', 'message', 'date'],
+          })
+          .then((list) => {
+            const listing =
+              list
+                .map((event) => `${event.eventname} - ${event.message} - ${event.date}`)
+                .join('\n') || "Pas d'events";
+            message.channel.send(`Liste de tous les évènements:\n${listing}`, { split: true });
+          })
+          .catch(() => message.reply('Une erreur est survenue'));
+        break;
     }
   }
 });
