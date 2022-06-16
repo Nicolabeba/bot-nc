@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     message: Sequelize.TEXT,
-    date: Sequelize.DATEONLY,
+    date: Sequelize.DATE,
   });
   return Event;
 };

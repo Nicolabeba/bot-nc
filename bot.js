@@ -10,7 +10,6 @@ const client = new Client();
 client.login(process.env.DISCORDJS_BOT_TOKEN);
 
 client.on('ready', () => {
-  console.log(`${client.user.tag}`);
   //On instencie la BDD (creation si inexistente ou MAJ si existente) :
   db.sequelize.sync();
   // .sync({ force: true })
@@ -37,12 +36,13 @@ client.on('message', (message) => {
       // On crée des events à des dates différentes:
       case 'addEvent':
         const options = commandArgs.split('//');
-        console.log(options);
-        const newEvent = Event.create({
-          eventname: options[0],
-          message: options[1],
-          date: options[2],
-        })
+        const date = moment.utc(options[2], 'DD/MM/YYYY');
+        db.event
+          .create({
+            eventname: options[0],
+            message: options[1],
+            date,
+          })
           .then(() => {
             message.reply('Commande ajoutée');
           })
