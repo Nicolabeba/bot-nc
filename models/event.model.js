@@ -1,12 +1,13 @@
 const Sequelize = require('sequelize');
 
-module.export = (sequelize, Datatypes) => {
-  return sequelize.define('event', {
-    command: {
+module.exports = (sequelize, DataTypes) => {
+  const Event = sequelize.define('Event', {
+    eventname: {
       type: Sequelize.STRING,
-      unique: true,
+      allowNull: false,
     },
     message: Sequelize.TEXT,
-    deleteMessage: Sequelize.BOOLEAN,
+    date: Sequelize.DATEONLY,
   });
+  return Event;
 };

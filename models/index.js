@@ -1,4 +1,4 @@
-const dbConfig = require('../config/db.config.js');
+//const dbConfig = require('../config/db.config.js');
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize({
@@ -11,6 +11,6 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-//db.event = require('./event.model.js')(sequelize, Sequelize.Datatypes);
+db.event = require('./event.model.js')(sequelize, Sequelize.DataTypes);
 
 module.exports = db;
