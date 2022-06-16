@@ -11,4 +11,6 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+//db.event = require('./event.model.js')(sequelize, Sequelize.Datatypes);
+
 module.exports = db;
